@@ -1,0 +1,590 @@
+WHY DOES REACT NEED A ROOT ELEMENT?
+SInce React is all JS, it needs an element where it can render out its own DOM tree
+https://www.testdome.com/questions?visibility=3&skillId=304
+https://javascript.info/
+
+what does serviceworker do? what is App cell? what is a PWA(Progressive web apps) eg: fipkart
+
+Kubernetes
+https://d3jb1lt6v0nddd.cloudfront.net/udemy/Learn+DevOps+-+Kubernetes.pdf   https://github.com/wardviaene/kubernetes-course
+udemy free account
+username/password - accounts@goodworklabs.com/
+Accounts@123
+
+each return statement must have only one div
+Diff between State and Props?
+State is a way for a component to store an internal state and it is perfect for when u want to store a field value or perhaps toggle a modal.
+Props is what is being passed to component from the parent  element, this is how u most commonly work with data in react.
+
+What is context??
+Context is globally available prop that should only be used on occasions when u need something that is going to b everywhere in the applications 
+perhaps for translating texts or something like that
+
+Here’s the syntax for the useEffect() hook:
+
+const App = () => {
+ const [joke, setJoke] = useState("Please wait...");
+useEffect(() => {
+   axios("https://icanhazdadjoke.com", {
+     headers: {
+       "Accept": "application/json",
+       "User-Agent": "Zeolearn"
+     }
+   }).then(res => setJoke(res.data.joke));
+ },[]);
+  return (<div className="joke">{joke}</div>);
+}
+
+Order of lifecycle methods
+During Inital render:
+constructor->ComponentWillMount-->render-->ComponentDidMount
+
+During re render
+
+where re rendering is not required
+1.Pure Components 2.shouldComponentUpdate
+shouldComponentUpdate has 2 argumens nextProp and nextState
+shouldComponentUpdate(nextProp,nextState){
+return (this.state.val===nextState.val?false:true)
+
+logging out users from multiple tabs in React??
+1. You can attach a listener to a storage event (fired when storage item is changed) and send a logout-event signal.
+
+localStorage.setItem('logout-event', 'logout' + Math.random());
+Every other tab will get it with a listener.
+
+window.addEventListener('storage', function(event){
+    if (event.key == 'logout-event') { 
+        // ..
+    }
+});
+We can add an event listener for our storage and check if the token becomes null then,
+ we’ll dispatch a logout action to logout the user from all the open tabs.
+
+2. auto-refresh, for example every 60 seconds, just to be sure it works when tabs are opened at different computers.
+ If localStorage doesn't work (very old browsers), auto-refresh every 3 seconds.
+ To each page of your site, you will have to add a javascript code which will periodically (say every second) check login status 
+ by sending asynchronous requests to your server.
+
+ setInterval(check_login_status(), 1000);  
+
+And if it recieves a not logged in response, it will have to redirect him to logged out page
+
+ window.open('/logged-out', '_self'); 
+
+Higher Order Components??
+a component tht returns another component.
+In this we dont change the functionality of component but minor things like injecting new props, building custom errors and setting defaults.
+
+
+Pure Components: where re rendering is not required
+import {PureComponent} from 'react';
+class App extends Pure.Component{
+}
+It does a shallow compare of objects between previous state and current state
+If both same nothing changes
+
+What are propTypes and what are the benefits/drawbacks of using them??
+Prop Types is a way fro u to know what types a component is expecting.
+They r great to know when u want to know what a component needs to work
+
+they often become legacy documentation and people forget to keep them updated or they put '.required' on the wrong things and often
+ i c people use '.object' instead of 'shapeOf'.
+
+
+Which lifecycle is the most common from ur perspective?? 
+'componentWillMount and componentDidMount and componentWillRecieveProps.It is often when i find that i need to do something 
+when my component is getting a new state
+
+When do use a Pure component and when a Class Component?
+I favour using PureComponents over Class Component if i m not storing a state or using a lifecycle event. Also for optimising performance
+
+How React Rendering works?
+React listens for DOM Updates and rerenders the DOM tree on every change but it can do this very quickly coz of a 
+diffing algorithm which checks if there is a change in state
+means that React checks if there is a 
+change in the Compoonent and only rerenders if there is 1.
+
+We create Ref's in a constructor, assign them to instance variables ,then pass it to a particular JSX element as props
+constructor(props){
+super(props);
+this.imageRef=React.createRef();
+}
+we pass this to jsx 
+example: <img ref={this.imageRef} alt="" src="" />
+
+why is redux state immutable,?
+Redux was originally invented to demonstrate the idea of "time-travel debugging" - being able to step back and forth through the history of 
+dispatched actions, and see what the UI looks like at each step. Another aspect is being able to live-edit the code, reload it, and see what the output looks
+ like given the new reducer logic.
+
+In order to be able to properly step back and forth between states, we need to make sure that reducer functions have no side effects. 
+That means data updates need to be applied immutably. If a reducer function actually directly modifies its data, then stepping back and forth between states will cause 
+the application to behave in an unexpected fashion, and the debugging effort will be wasted.
+
+Also, the React-Redux library relies on shallow equality checks to see if the incoming data for a component has changed.
+ If the data references are the same, then the wrapper components generated by connect assume that the data has not changed,
+ and that the component does not need to re-render. Immutable data updates means that new object references are created,
+ and thus connect will see that the data has changed and the UI needs to update.	
+
+===============================================================================================================================
+Controlled and Uncontrolled components
+A Controlled Component is one that takes its current value through props and notifies changes through callbacks like onChange.
+ A parent component "controls" it by handling the callback and managing its own state and passing the new values as props to the controlled component.
+ You could also call this a "dumb component".
+ 
+A Uncontrolled Component is one that stores its own state internally, and you query the DOM using a ref to find its current value when you need it. 
+This is a bit more like traditional HTML.
+
+In a controlled component, form data is handled by a React component. The alternative is uncontrolled components, where form data is handled by the DOM itself.
+To write an uncontrolled component, instead of writing an event handler for every state update, you can use a ref to get form values from the DOM.
+
+how to get object from an array
+event bubbling and event capture
+
+How to stop event bubbling -> event.stopPropagation()
+inline, block and inline-block diff? -> the major difference is that inline-block allows to set a width and height on the element.
+ Also, with display: inline, top and bottom margins & paddings are not respected, and with display: inline-block they are.
+ 
+height of span tag inside a anchor tag??
+how to disable anchor tags-event.preventDefault()
+Diff between a map and filter?
+how to get all values inside an obj??
+So map returns the same number of elements as the original, but the element value will be transformed in some way and filter will return the same or less number of elements 
+than the original but not change the original elements’ values.
+access a child state from parent??- using ref
+whats does babel and webpack do??
+
+Pure / Stateless Components
+In react when setState is called , rerendering occurs, this is blind as it doesn't check whether state has chaged or not.
+So sometimes its unnecessary to rerender.So to avoid that
+Does a shallow compare between previous and next state
+
+Data Types in JS
+Number, String, boolean, null, undefined, object, symbol
+
+Primitive vs Non-Primitive data types
+Data types that are known as primitive values in JavaScript are numbers, strings, boolean, null, undefined. 
+Objects such as functions and arrays are referred to as non-primitive values.
+
+The fundamental difference between primitives and non-primitives is that primitives are immutable and non-primitives are mutable.
+
+ES6 vs TypeScript
+There is no difference in both of them. Everything you write in ES6 is supported by Typescript.
+
+Typescript is an extension of ES6. Some features that are additionally included in Typescript are:
+
+1. Type Annotations 
+eg: name: String = ‘xyz’
+ number: Number = ‘123’;
+2. Interfaces
+3. Enums
+4. Mixins 
+and many more…
+
+Now your browser is not yet advanced to understand Typescript, so typescript’s compiler converts your code to plain js so that browser can understand it.
+TypeScript only support features are generics and type annotations, Interfaces, Enums, Readonly properties and Mixins
+Enums are a new data type supported in Javascript
+here are three types of enums:
+
+Numeric enum:they store string values as numbers.
+String enum:the enum values are initialized with string values rather than numeric values.
+Heterogeneous enum: contain both string and numeric values.
+
+Mixins
+[A mixin is] a function that
+
+1. takes a constructor,
+2. declares a class that extends that constructor,
+3. adds members to that new class, and
+4. returns the class itself.
+
+ES6 new features
+ES6 Features: handling asynchronous functions
+
+Arrows: These are a function which is described by the ‘=>’ syntax
+Objects: Object literals are used to support the prototype assignments.
+Classes: ES6 classes can be easily implemented over the prototype based object oriented pattern
+Destructing: It allows binding pattern which is based primarily on the pattern matching.
+String interpolation using Template Literals
+Default
+Spread Opertor
+Module Loaders
+Weak set
+Map
+New Library
+Promises
+Proxies
+
+uses of arrow functions?
+In classic function expressions, the this keyword is bound to different values based on the context in which it is called. With arrow functions however, 
+this is lexically bound. It means that it uses this from the code that contains the arrow function.
+
+ We’ve seen how arrow functions don’t bind a this and they just use the value of this in their scope. 
+ Arrow functions also don’t bind an arguments object. With function expressions, you can do this
+ 
+ Resolving multiple promises at once??
+ Promise.all() is useful anytime you have more than one promise and your code wants to know when all the operations that those promises represent 
+ have finished successfully. 
+ It does not matter what the individual async operations are. 
+ If they are async, are represented by promises and your code wants to know when they have all completed, then Promise.all() is built to do exactly that.
+ 
+ Promise.race(): used when passing multiple promises and i will be satisfied as soon as any 1 promise gets fulfilled, 
+ used when we r getting same data from all promises, o as sson as 1 gets fulfilled, we r satisfied. 
+
+For example, suppose you need to gather information from three separate remote API calls and when you have the results from all three API calls,
+ you then need to run some further code using all three results. That situation would be perfect for Promise.all(). You could so something like this:
+ Promise.all([apiRequest(...), apiRequest(...), apiRequest(...)]).then(function(results) {
+    // API results in the results array here
+    // processing can continue using the results of all three API requests
+}, function(err) {
+    // an error occurred, process the error here
+});
+
+WEBHOOKS???
+There are two ways your apps can communicate with each other to share information: polling and webhooks.
+Webhooks are automated messages sent from apps when something happens.
+ They have a message—or payload—and are sent to a unique URL—essentially the app's phone number or address.
+ Example: They're much like SMS notifications. Say your bank sends you an SMS when you make a new purchase.
+ You already told the bank your phone number, so they knew where to send the message. 
+ They type out "You just spent $10 at NewStore" and send it to your phone number +1-234-567-8900.
+ Something happened at your bank, and you got a message about it. All is well.
+ 
+ HTML 5 webWorkers
+ WHEN U MAKE A ASYNC CALL or when u click a button/when u execyte a big loop, during tht call execution it might take some time for the call to get complete.
+ During tht time u wont b able to do anything else
+ So what a WebWorker does it takes the async call to backend so tht rest of the functionality can be executed meanwhile.
+ 
+ When executing scripts in an HTML page, the page becomes unresponsive until the script is finished.
+A web worker is a JavaScript that runs in the background, independently of other scripts, without affecting the performance of the page.
+ You can continue to do whatever you want: clicking, selecting things, etc., while the web worker runs in the background.
+ We can terminate the web worker using the "terminate" keyword and reuse it by setting it to "undefined"
+ 
+ Javascript call stack
+ JavaScript has a single call stack in which it keeps track of what function we’re currently executing and what function is to be executed after that.
+ But first — what’s a stack? A stack is an array-like data structure but with some limitations — y
+ ou can only add items to the back and only remove the last item. Another example is a pile of plates — you put them on top of each other and at any time 
+ you can only remove the top one.
+
+When you’re about to execute a function it is added on the call stack. 
+Then if that function calls another function — the other function will be on top of the first one in the call stack.
+ When you get an error in the console you get a long message that shows you the path of execution — this is what the stack looked in that exact moment. 
+ But what if we make a request or put a timeout on something? 
+ In theory that should freeze the entire browser until it is executed so the call stack can continue? In practice however, 
+ you know that this doesn’t happen — because of the Event Table and Event Queue.
+ 
+ The Event Table & Event Queue
+Every time you call a setTimeout function or you do some async operation — it is added to the Event Table. 
+This is a data structure which knows that a certain function should be triggered after a certain event. 
+Once that event occurs (timeout, click, mouse move) it sends a notice. 
+Bear in mind that the Event Table does not execute functions and does not add them to the call stack on it’s own.
+ It’s sole purpose is to keep track of events and send them to the Event Queue.
+
+The Event Queue is a data structure similar to the stack — again you add items to the back but can only remove them from the front. 
+It kind of stores the correct order in which the functions should be executed. It receives the function calls from the Event Table,
+ but it needs to somehow send them to the Call Stack? This is where the Event Loop comes in.
+ 
+Event Loop
+We’ve finally reached the infamous Event Loop. This is a constantly running process that checks if the call stack is empty. 
+Imagine it like a clock and every time it ticks it looks at the Call Stack and if it is empty it looks into the Event Queue. 
+If there is something in the event queue that is waiting it is moved to the call stack. If not, then nothing happens. 
+
+Another interesting example of the Event Loop’s behavior is recursion. Have you ever seen the stack overflow error message? 
+You sometimes get that when you make an infinite recursion but sometimes you actually have a big number of recursive calls that you want to make.
+There’s a simple yet hacky workaround which will allow you to retain your code structure and still make an absurd amount of calls — 
+wrap your recursion calls in setTimeout.
+
+Super() vs super(props)?
+If you want to use this.props inside constructor, you need to pass it in super,
+otherwise it’s okay to not pass props to super as we see that irrespective of passing it to super,
+this.props is available inside render function.
+
+Conflicts when using D3.js with React.js??
+If it’s React: then React will create, remove and update DOM nodes. All of the d3 selectAll/data patterns will be replaced by the use of React props.
+ There’s more to d3js than DOM manipulation though: color palettes, data scales, generating paths etc, 
+ all of which you can use even for nodes not created through d3js. This approach is more performant and more React-y but makes transitions, 
+ one of the most compelling aspect of d3js, harder to implement. You’d have to rely on componentDidUpdate / componentWillUnmount methods. 
+ Note that this is pretty similar to working with canvas and d3js.
+ 
+he way most people use D3 with React is to use React to build the structure of the application, and to render traditional HTML elements, 
+and then when it comes to the data visualization section,
+ they pass a DOM container (typically an <svg>) over to D3 and use D3 to create and destroy and update elements.
+ The main difficulty is that you need to create functions in various React lifecycle events to make sure your viz updates.
+ 
+ import React, { Component } from 'react'
+import './App.css'
+import { scaleLinear } from 'd3-scale’
+import { max } from 'd3-array'
+import { select } from 'd3-selection'
+class BarChart extends Component {
+   constructor(props){
+      super(props)
+      this.createBarChart = this.createBarChart.bind(this)
+   }
+   componentDidMount() {
+      this.createBarChart()
+   }
+   componentDidUpdate() {
+      this.createBarChart()
+   }
+   createBarChart() {
+      const node = this.node
+      const dataMax = max(this.props.data)
+      const yScale = scaleLinear()
+         .domain([0, dataMax])
+         .range([0, this.props.size[1]])
+   select(node)
+      .selectAll('rect')
+      .data(this.props.data)
+      .enter()
+      .append('rect')
+   
+   select(node)
+      .selectAll('rect')
+      .data(this.props.data)
+      .exit()
+      .remove()
+   
+   select(node)
+      .selectAll('rect')
+      .data(this.props.data)
+      .style('fill', '#fe9922')
+      .attr('x', (d,i) => i * 25)
+      .attr('y', d => this.props.size[1] — yScale(d))
+      .attr('height', d => yScale(d))
+      .attr('width', 25)
+   }
+render() {
+      return <svg ref={node => this.node = node}
+      width={500} height={500}>
+      </svg>
+   }
+}
+export default BarChartcbv
+ 
+ 
+ 
+ Grid system
+display:grid;
+grid-template-rows: 300px 100px; height of 1st row becomes 300px, 2nd row as 100px
+grid-template-columns: 100px 200px 300px; width of 1st column is 100, 2nd has 200 and 3rd has 300
+grid-column-gap: 20px; grid-row-gap: 20px;    introduces gaps beteen rows and columns
+grid-gap:20px; for both rows and columns
+
+grid-template-columns:repeat(3,200px); 3 is no of times u wanna repeat the columns and 200 px is the size
+This is non-responsive as we r using pixel
+So we use fractional unit i.e. fractional
+
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+
+grid-template-columns:1fr 1fr 1fr; creating 3 columns and each takes 1 fraction of a space. This is responsive
+similarly,
+grid-template-columns:1fr 3fr 1fr; the middle column takes 3 frction of a spce available 
+
+.item5{
+  grid-column-start:1;//starts at its own line 1
+  grid-column-end:3;//ends at it own line3
+}	
+
+In Bootstrap, the "row" class is used mainly to hold columns in it. Bootstrap divides each row into a grid of 12 virtual columns.
+
+Javascript hoisting
+When a variable is declared b4 getting initialised.
+
+var y=2;
+var x= function(){
+ console.log(y); //undefined
+ var y=1;
+}
+
+react mostly is client side rendering but can be run both on client side as well as server side rendering.
+React allows developers to create large web-applications that use data and can change over time without reloading the page. 
+It aims primarily to provide speed, simplicity, and scalability. 
+
+In Client-side rendering, your browser downloads a minimal HTML page. It renders the JavaScript and fills the content into it.
+
+Server-side rendering, on the other hand, renders the React components on the server. The output is HTML content.
+Cons of Rendering React on the Server
+SSR can improve performance if your application is small. But it can also degrade performance if it is heavy.
+It increases response time (and it can be worse if the server is busy).
+It increases response size, which means the page takes longer to load.
+It increases the complexity of the application.
+
+
+Context -API
+to pass props to deeply nested children
+
+eg: state={
+   age:100,
+   name:"manas"
+}
+* to create a context
+	const myContext=React.createContext();
+
+to return a parents data to a child we wrap the	context inside a provider eg: <myContext.Provider value={{ state:this.state }}> {this.props.children} </myContext.Provider>
+And to recieve tht data in child we use Consumer. It always renders a function
+eg: <myContext.Consumer>
+       {(context)=>( <p>I'm inside the {context}</p> //context contains data stored inside value. 
+	   //context.state.age gives us age and context.state.name gives us name..also functions can be passed in provider value
+	   )}
+	</myContext.Consumer>
+	
+How to check whteher video is buffering?
+You can check the state at any time by looking at two properties, networkState and readyState
+if (video.networkState === video.NETWORK_LOADING) {
+    // The user agent is actively trying to download data.
+}
+
+if (video.readyState < video.HAVE_FUTURE_DATA) {
+    // There is not enough data to keep playing from this point
+}	
+	
+	Using async and await
+We can make working with promises even simpler with async and await. 
+The await keyword resolves the promise and returns the value which we can assign to a variable. 
+
+Why is Lazy Loading (& Suspense) Important
+Firstly, bundling involves aligning our code components in progression and putting them in one javascript chunk that it passes to the browser;
+ but as our application grows, we notice that bundle gets very cumbersome in size. This can quickly make using your application very hard and especially slow.
+ With Code splitting, the bundle can be split to smaller chunks where the most important chunk can be loaded first 
+ and then every other secondary one lazily loaded.
+Also, while building applications we know that as a best practise consideration should be made for users using mobile internet data and 
+others with really slow internet connections. We the developers should always be able to control the user experience even during a suspense period
+(when the data is still being loaded in the DOM) 
+when resources are being loaded to the DOM.
+
+
+Suspense
+Suspense is a component required by the lazy function basically used to wrap lazy components. 
+Multiple lazy components can be wrapped with the suspense component.
+ It takes a fallback property that accepts the react elements you want to render as the lazy component is being loaded.
+	
+	const OtherComponent = React.lazy(() => import('./OtherComponent'));
+	
+CSS 3 new features	
+Attribute selectors
+Matches any element E whose attribute attr starts with the value val. In other words, the val matches the beginning of the attribute value.
+E[attr^=val]
+eg.          a[href^='http://sales.']{color: teal;}	
+
+Matches any element E whose attribute attr ends in val. In other words, the val matches the end of the attribute value.
+E[attr$=val]
+eg.          a[href$='.jsp']{color: purple;}
+
+border-radius for rounded corners
+Drop Shadows: box-shadow: 2px 5px 0 0 rgba(72,72,72,1);
+Text Shadow
+Linear Gradients
+background: linear-gradient(to right, red , yellow);
+
+Multiple Background Images eg:background-image:
+url(firstImage.jpg),
+url(secondImage.gif),
+url(thirdImage.png);
+
+2 way binding in react- using LinkedStateMixin
+var createReactClass = require('create-react-class');
+
+var WithLink = createReactClass({
+  mixins: [LinkedStateMixin],
+  getInitialState: function() {
+    return {message: 'Hello!'};
+  },
+  render: function() {
+    return <input type="text" valueLink={this.linkState('message')} />;
+  }
+});
+FOR 2 WAY BINDING VALUE/valueLink needs to be declared along with onChange
+
+LinkedStateMixin adds a method to your React component called linkState().
+ linkState() returns a valueLink object which contains the current value of the React state and a callback to change it.
+ valueLink objects can be passed up and down the tree as props, 
+ so it’s easy (and explicit) to set up two-way binding between a component deep in the hierarchy and state that lives higher in the hierarchy.
+ 
+ Events in react
+ onClick(), onChange, onSubmit
+ 
+ In summary, here’s what happens when you try to update the DOM in React:
+
+The entire virtual DOM gets updated.
+The virtual DOM gets compared to what it looked like before you updated it. React figures out which objects have changed.
+The changed objects, and the changed objects only, get updated on the real DOM.
+Changes on the real DOM cause the screen to change.
+
+Thunk
+Thunk middleware allows you to write action creators that return a function instead of an action.
+ The thunk can be used to delay the dispatch of an action, or to dispatch only if a certain condition is met. 
+The inner function receives the store methods dispatch and getState as parameters.
+
+Can we do a map inside render?? Answer: yes
+
+React Lazy() vs React Loadable?
+React Loadable works with server side rendering, while React.lazy only works on the client side. 
+
+SASS (Syntactically Awesome Stylesheets) is a CSS pre-processor that lets you use variables, mathematical operations, mixins, loops, 
+functions, imports,and other interesting functionalities that make writing CSS much more powerful.
+Advantages of sass
+1. Variables- eg: $blue: #004BB4;
+h1 {
+  font: $ubuntu-font;
+  color: $blue;
+}
+
+2.It uses nested syntax(nesting)
+.navbar {
+  font: $ubuntu-font;
+  color: $blue;
+  li {
+    margin-left: 1rem;
+    a {
+      padding: 5px;
+      font-size: 1.5rem;
+      span {
+        font-weight: 600;
+   }}}}
+3. mixins- if you have blocks of code repeating in your style sheet more than once.
+They return a value or set of values and can take parameters including default values. eg:
+@mixin set-font( $family: 'Ubuntu' , $weight: 400 , $style: normal ) {
+  font-family: $family , 'Arial', 'Helvetica', sans-serif;
+  font-style: $style;
+  font-weight: $weight;
+}
+
+To use a mixin we use the includes keyword
+h1 {
+  @include set-font;
+  color: $blue;
+}
+
+4. importing SCSS/SASS files is really easy: as this doesnt send a http request each time.
+he difference between this and the CSS @import rule is that all imported SCSS files will be merged together into a single CSS file, 
+so in the end, only a single HTTP call will be requested because you will be serving a unique CSS file to the web server.
+@import "source/font-awesome";           
+@import "source/slick";                         
+@import "framework/bootstrap";  
+@import "my-custom-theme";
+
+
+Dynamic Import for code splitting, loading a component only when called
+This props.load returns a promise, which when resolved calls a module
+
+class DynamicImport extends React.Component{
+  state={
+   component:null
+  }
+  componentWillMount()  {
+    this.props.load() //calls the module, this is a promise once resolved
+	 .then((mod)=> this.setState(()=>({
+	 component:mod.default
+	 })))
+  }
+  render(){
+   return this.props.children(this.state.Component)
+  }
+}
+
+const Settings=(props)=>(
+  <DynamicImport load={()=>import('./Settings')}>
+  {(Component)=>Component===null ? <h1>Loading...</h1> : <Component {...props} /> }
+  </DynamicImport>  
+)
