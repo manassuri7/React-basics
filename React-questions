@@ -3,7 +3,210 @@ SInce React is all JS, it needs an element where it can render out its own DOM t
 https://www.testdome.com/questions?visibility=3&skillId=304
 https://javascript.info/
 
+selectors vs elements, selectors r class and id while elements r <p>,<div>,<span>
+
+memoization- another way specially for functional components to stop unnecessary re-rendering when the state hasn't changed.
+
+React Memoization: to avoid unnecessary re rendering if prop== prev prop in functional components
+import React from "react";
+
+export default React.memo(props => {
+  console.log("val =", props.val);
+  return <div>{props.val}</div>;
+});
+
+import React, { Component } from "react";
+import FunctionalComp from "./compoments/functionalComp";
+
+import "./App.css";
+import functionalComp from "./compoments/functionalComp";
+
+class App extends Component {
+  state = {
+    val: 1
+  };
+
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({ val: 1 }); //coz of this every1 sec, it will try to setState but memo prevents unecessary re rendering.
+    }, 3000);
+  }
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <FunctionalComp val={this.state.val} />
+        </header>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+align-items vs align-content in flex?
+The align-items property of flex-box aligns the items inside a flex container along the cross axis just like justify-content does along the main axis.
+But align-content is for multi line flexible boxes. It has no effect when items are in a single line. It aligns the whole structure according to its value.
+
+The React docs say that you can use props.children on components that represent ‘generic boxes’ and that don’t know their children ahead of time. 
+For me, that didn’t really clear things up. I’m sure for some, that definition makes perfect sense but it didn’t for me.
+
+My simple explanation of what this.props.children does is that it is used to display whatever you include between the opening and closing tags when 
+invoking a component.
+eg:                                                    
+const Picture = (props) => {                  //App.js   
+  return (                                      render () {
+    <div>                                           <div className='container'>
+      <img src={props.src}/>                         <Picture key={picture.id} src={picture.src}>
+      {props.children}                                  //what is placed here is passed as props.children  
+    </div>                                            </Picture>
+  )                                                 </div> )}
+} 
+this component contains an <img> that is receiving some props and then it is displaying {props.children}.
+Whenever this component is invoked {props.children} will also be displayed and this is just a reference to 
+what is between the opening and closing tags of the component.
+
+Instead of invoking the component with a self-closing tag <Picture /> if you invoke it will full opening and closing tags <Picture> </Picture> 
+you can then place more code between it.
+This de-couples the <Picture> component from its content and makes it more reusable.
+
+Grid vs flex?
+Grid is Container-Based, Flexbox is Content-Based
+Grid Has a “Gap” Property, Flexbox Doesn’t
+Flexbox is One Dimensional, Grid is Two Dimensional
+
+A pseudo-class filters existing elements.
+a:link means all <a>s that are :link.
+
+A pseudo-element is a new fake element.
+div::after means non-existing elements after <div>s.
+input[type="email"].big-dog::placeholder {
+  color: orange;
+}
+
+funtional components in react can't have state, u need to use hooks for tht
+
+What is NPM and Yarn?
+Both NPM and Yarn are both package managers. Package Managers is essentially a way to automate the process of
+ installing, upgrading, configuring or removing software.
+ Yarn is fast as Yarn installs multiple packages at once compared to NPM which installs one at a time.
+ Yarn is secure too only installs from your yarn.lock or package.json files. 
+ Yarn.lock ensures that the same package is installed throughout all devices,
+ this reduces the possibility of bugs from having different versions installed. 
+ 
+ Keys help React identify which items have changed, are added, or are removed. Keys should be given to the elements inside the array
+ to give the elements a stable identity:
+ How to create unique keys for React elements?
+ There are many ways in which you can create unique keys, the simplest method is to use the index when iterating arrays.
+ Other ways:
+ You can create a function to generate unique keys/ids/numbers/strings and use that
+You can make use of existing npm packages like uuid, uniqid, etc or use random
+
+getDerivedStateFromProps is called after props change and after setState
+constructor(props) {
+    super(props);
+    this.state = {
+        expanded: props.expanded,
+        ownUpdate: false
+    }
+}
+
+static getDerivedStateFromProps(props, state) {
+    if (state.ownUpdate) {
+        return {
+            expanded: state.expanded,
+            ownUpdate: false
+        };
+    } else if (props.expanded !== state.expanded) {
+        return {
+            expanded: props.expanded
+        };
+    }
+    return null;
+}
+
+toggle() {
+    this.props.onAftePress(this.state.expanded, this.props.index);
+    this.setState({
+        expanded: !this.state.expanded,
+        ownUpdate: true
+    })
+}
+shareimprove this answer
+ 
+ Calling setState in render causes infinite loops
+ Calling setState() here makes your component a contender for producing infinite loops.
+
+The render() function should be pure, meaning that it does not modify component state, it returns the same result each time it’s invoked, 
+and it does not directly interact with the browser.
+setState() is async, meaning there is no guarantee that the state has been updated if we try to access the value immediately
+You can only change state with setState and React will react to the change
+
+setting state in componentWillUnmount shd not be done coz it can lead to memory leaks and lead to slowness of ur React App
+The worst case would be to miss removing event listeners and especially intervals. Imagine an interval every second updating the local state of a component
+ even though the component got unmounted. If you miss to remove this interval, you may experience how it slows down your application.
+
+Middleware:eg: redux-thunk and redux-logger, saga
+In thunk instead of dispatching actions directly we wrap it inside a function/action-creator and then we call that function to return 
+that action.
+
+Updating Nested Objects in redux 
+The key to updating nested data is that every level of nesting must be copied and updated appropriately.
+Correct Approach: Copying All Levels of Nested Data
+function updateVeryNestedField(state, action) {
+  return {
+    ...state,
+    first: {
+      ...state.first,
+      second: {
+        ...state.first.second,
+        [action.someId]: {
+          ...state.first.second[action.someId],
+          fourth: action.someValue
+        }
+      }
+    }
+  }
+}
+ Or third party libraries like Immer or redux toolkit can also b used
+ Our Redux Toolkit package includes a createReducer utility that uses Immer internally. Because of this, 
+ you can write reducers that appear to "mutate" state, but the updates are actually applied immutably.
+ import { createReducer } from '@reduxjs/toolkit'
+
+const initialState = {
+  first: {
+    second: {
+      id1: { fourth: 'a' },
+      id2: { fourth: 'b' }
+    }
+  }
+}
+
+const reducer = createReducer(initialState, {
+  UPDATE_ITEM: (state, action) => {
+    state.first.second[action.someId].fourth = action.someValue
+  }
+})
+this only works correctly if you are using the "magic" createReducer function from
+ Redux Toolkit that wraps this reducer in Immer's produce function.
+ 
+promises vs callbacks?
+Javascript has two major ways of dealing with asynchronous tasks - callbacks and Promises.
+aslo async/await can also be used.
+
 what does serviceworker do? what is App cell? what is a PWA(Progressive web apps) eg: fipkart
+serviceworker- it is a script that caches all the resources needed on 1st render for page, manages cache and 
+helps u decide when to hit cache and when to hit web server network.
+These also can handle push notifications/messages. when a mesage comes in, it wakes up the service worker and then using its onpush handler
+to show the notification.
+To check if browser supports service worker, put a cond. in service worker file like if('serviceworker' in navigator), then register the file
+
+React interview projects
+"Comments  And Reply" - https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
+"ToDo List" - https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
+"Restaurant Search" -https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
+
 
 Kubernetes
 https://d3jb1lt6v0nddd.cloudfront.net/udemy/Learn+DevOps+-+Kubernetes.pdf   https://github.com/wardviaene/kubernetes-course
@@ -11,7 +214,10 @@ udemy free account
 username/password - accounts@goodworklabs.com/
 Accounts@123
 
-each return statement must have only one div
+React.Fragments vs div for returning multiple children?
+Fragments let you group a list of children without adding extra nodes to the DOM.
+
+IMP****each return statement must have only one div
 Diff between State and Props?
 State is a way for a component to store an internal state and it is perfect for when u want to store a field value or perhaps toggle a modal.
 Props is what is being passed to component from the parent  element, this is how u most commonly work with data in react.
@@ -76,6 +282,58 @@ Higher Order Components??
 a component tht returns another component.
 In this we dont change the functionality of component but minor things like injecting new props, building custom errors and setting defaults.
 
+Syntax of hoc
+const EnhancedComponent = higherOrderComponent(WrappedComponent, data we r interested in);
+
+eg:
+const CommentListWithSubscription = withSubscription(
+  CommentList,
+  (DataSource) => DataSource.getComments()
+);
+//When CommentListWithSubscription and BlogPostWithSubscription are rendered, CommentList and BlogPost will be passed a data prop
+// with the most current data retrieved from DataSource:
+
+const BlogPostWithSubscription = withSubscription(      //BlogPostWithSubscription is the enhanced component, withSubscription is the hoc name, 
+  BlogPost,                                              //BlogPost is wrapped component and
+  (DataSource, props) => DataSource.getBlogPost(props.id)  //(DataSource, props) is the repetitive data tht we want to include in hoc
+);
+// This function takes a component...
+function withSubscription(WrappedComponent, selectData) {
+  // ...and returns another component...
+  return class extends React.Component {
+    constructor(props) {
+      super(props);
+      this.handleChange = this.handleChange.bind(this);
+      this.state = {
+        data: selectData(DataSource, props)
+      };
+    }
+
+    componentDidMount() {
+      // ... that takes care of the subscription...
+      DataSource.addChangeListener(this.handleChange);
+    }
+
+    componentWillUnmount() {
+      DataSource.removeChangeListener(this.handleChange);
+    }
+
+    handleChange() {
+      this.setState({
+        data: selectData(DataSource, this.props)
+      });
+    }
+
+    render() {
+      // ... and renders the wrapped component with the fresh data!
+      // Notice that we pass through any additional props
+      return <WrappedComponent data={this.state.data} {...this.props} />;
+    }
+  };
+}
+//a HOC doesn’t modify the input component, nor does it use inheritance to copy its behavior.
+ Rather, a HOC composes the original component by wrapping it in a container component. A HOC is a pure function with zero side-effects.
+
 
 Pure Components: where re rendering is not required
 import {PureComponent} from 'react';
@@ -130,10 +388,12 @@ Also, the React-Redux library relies on shallow equality checks to see if the in
 ===============================================================================================================================
 Controlled and Uncontrolled components
 A Controlled Component is one that takes its current value through props and notifies changes through callbacks like onChange.
- A parent component "controls" it by handling the callback and managing its own state and passing the new values as props to the controlled component.
+ A parent component "controls" it by handling the callback and managing its own state and passing the new values as props to 
+ the controlled component.
  You could also call this a "dumb component".
  
-A Uncontrolled Component is one that stores its own state internally, and you query the DOM using a ref to find its current value when you need it. 
+A Uncontrolled Component is one that stores its own state internally, and you query the DOM using a ref to find its current 
+value when you need it. 
 This is a bit more like traditional HTML.
 
 In a controlled component, form data is handled by a React component. The alternative is uncontrolled components, where form data is handled by the DOM itself.
@@ -445,7 +705,8 @@ The await keyword resolves the promise and returns the value which we can assign
 
 Why is Lazy Loading (& Suspense) Important
 Firstly, bundling involves aligning our code components in progression and putting them in one javascript chunk that it passes to the browser;
- but as our application grows, we notice that bundle gets very cumbersome in size. This can quickly make using your application very hard and especially slow.
+ but as our application grows, we notice that bundle gets very cumbersome in size. This can quickly make using your application very hard and
+ especially slow.
  With Code splitting, the bundle can be split to smaller chunks where the most important chunk can be loaded first 
  and then every other secondary one lazily loaded.
 Also, while building applications we know that as a best practise consideration should be made for users using mobile internet data and 
@@ -460,6 +721,21 @@ Multiple lazy components can be wrapped with the suspense component.
  It takes a fallback property that accepts the react elements you want to render as the lazy component is being loaded.
 	
 	const OtherComponent = React.lazy(() => import('./OtherComponent'));
+	
+	
+HTML5 new features	
+<section> defines sections of pages.
+<header> defines the header of a page.
+<footer> defines the footer of a page.
+<nav> defines the navigation on a page.
+<article> defines the article or primary content on a page.
+<aside> defines extra content like a sidebar on a page.
+<figure> defines images that annotate an article.	
+<progress> indicates the progress of a task towards completion.
+async and defer in script tags
+<video> – Add video to your web pages with this simple tag.
+<audio> – Add sound to your web pages with this simple tag.
+
 	
 CSS 3 new features	
 Attribute selectors
