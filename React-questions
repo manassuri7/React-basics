@@ -3,7 +3,31 @@ SInce React is all JS, it needs an element where it can render out its own DOM t
 https://www.testdome.com/questions?visibility=3&skillId=304
 https://javascript.info/
 
+React interview projects
+"Comments  And Reply" - https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
+"ToDo List" - https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
+"Restaurant Search" -https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
+
+Redux projects-https://react.rocks/tag/Redux
+Drag and drop projects-https://react.rocks/tag/Drag_Drop
+React-https://react.rocks/tag/Beautiful
+
+
+Kubernetes
+https://d3jb1lt6v0nddd.cloudfront.net/udemy/Learn+DevOps+-+Kubernetes.pdf   https://github.com/wardviaene/kubernetes-course
+udemy free account
+username/password - accounts@goodworklabs.com/
+Accounts@123
+
 selectors vs elements, selectors r class and id while elements r <p>,<div>,<span>
+
+componentWillUnmount which gets called before the component is removed from the DOM. 
+This method can be beneficial when needing to perform clean up operations, f.e. removing any timers defined in componentDidMount.
+
+to make a const obj immutable, we need to use freeze keyowrd
+const frozen = Object.freeze(['Ice', 'Icicle', 'Ice cube'])
+frozen.push('Water')
+// Uncaught TypeError: Can't add property 3, object is not extensible
 
 memoization- another way specially for functional components to stop unnecessary re-rendering when the state hasn't changed.
 
@@ -133,7 +157,7 @@ toggle() {
         ownUpdate: true
     })
 }
-shareimprove this answer
+
  
  Calling setState in render causes infinite loops
  Calling setState() here makes your component a contender for producing infinite loops.
@@ -142,6 +166,9 @@ The render() function should be pure, meaning that it does not modify component 
 and it does not directly interact with the browser.
 setState() is async, meaning there is no guarantee that the state has been updated if we try to access the value immediately
 You can only change state with setState and React will react to the change
+
+SetState can take upto 2 values. 1-state updater and 2nd-callback
+eg:this.setState({[name]:value},()=>{this.logFields()});
 
 setting state in componentWillUnmount shd not be done coz it can lead to memory leaks and lead to slowness of ur React App
 The worst case would be to miss removing event listeners and especially intervals. Imagine an interval every second updating the local state of a component
@@ -202,17 +229,7 @@ These also can handle push notifications/messages. when a mesage comes in, it wa
 to show the notification.
 To check if browser supports service worker, put a cond. in service worker file like if('serviceworker' in navigator), then register the file
 
-React interview projects
-"Comments  And Reply" - https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
-"ToDo List" - https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
-"Restaurant Search" -https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
 
-
-Kubernetes
-https://d3jb1lt6v0nddd.cloudfront.net/udemy/Learn+DevOps+-+Kubernetes.pdf   https://github.com/wardviaene/kubernetes-course
-udemy free account
-username/password - accounts@goodworklabs.com/
-Accounts@123
 
 React.Fragments vs div for returning multiple children?
 Fragments let you group a list of children without adding extra nodes to the DOM.
@@ -864,3 +881,47 @@ const Settings=(props)=>(
   {(Component)=>Component===null ? <h1>Loading...</h1> : <Component {...props} /> }
   </DynamicImport>  
 )
+
+React question to start a timer when hovering over the box and stopping it when u exit the box hover, also a reset button is der to reset the timer
+//onMouseEnter
+//onMouseLeave
+
+class App extends React.Component {
+   constructor(props){
+    super(props)
+     this.handleHover=this.handleHover.bind(this);
+     this.resetButton=this.resetButton.bind(this);
+     this.timerIncrease=this.timerIncrease.bind(this);
+     this.handleLeave=this.handleLeave.bind(this);
+   }
+   state={time:0};
+
+   timerIncrease=()=>{
+     this.setState({time:this.state.time+1})
+   }
+
+   handleHover=()=>{
+    this.myInterval=setInterval(this.timerIncrease,1000)
+   }
+
+   handleLeave=()=>{
+      clearInterval(this.myInterval);
+   }
+
+   resetButton=()=>{
+     this.setState({time:0})
+   }
+
+
+  render(){
+  return (
+    <div className="App">
+      <div className="hover-box" onMouseLeave={this.handleLeave} onMouseEnter={this.handleHover}>Box on hover</div>
+      <p className="hover-timer">{this.state.time} seconds</p>
+      <button onClick={this.resetButton} className="hover-reset">Reset</button>
+    </div>
+  );
+}}
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
