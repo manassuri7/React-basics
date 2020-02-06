@@ -13,6 +13,8 @@ Drag and drop projects-https://react.rocks/tag/Drag_Drop
 React-https://react.rocks/tag/Beautiful
 
 
+
+
 Kubernetes
 https://d3jb1lt6v0nddd.cloudfront.net/udemy/Learn+DevOps+-+Kubernetes.pdf   https://github.com/wardviaene/kubernetes-course
 udemy free account
@@ -417,7 +419,9 @@ In a controlled component, form data is handled by a React component. The altern
 To write an uncontrolled component, instead of writing an event handler for every state update, you can use a ref to get form values from the DOM.
 
 how to get object from an array
-event bubbling and event capture
+event bubbling and event capture(in modern browsers always capturing happens first)
+
+To use event capturing use "true" in the event listenerf
 
 How to stop event bubbling -> event.stopPropagation()
 inline, block and inline-block diff? -> the major difference is that inline-block allows to set a width and height on the element.
@@ -925,3 +929,161 @@ class App extends React.Component {
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
+
+
+
+import ReactDOM from "react-dom";
+import React, { Component } from "react";
+
+// state data for 3 counters
+
+// Counter Component
+class Counter extends Component {
+  render() {
+    const { counter, onChange } = this.props;
+    return (
+      <div className="counter">
+        <b>{counter.value}</b>
+        <div className="counter-controls">
+          <button
+            className="button is-danger is-small"
+            onClick={() => onChange(counter.id, counter.value - 1)}
+          >
+            -
+          </button>
+          <button
+            className="button is-success is-small"
+            onClick={() => onChange(counter.id, counter.value + 1)}
+          >
+            +
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+class App extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      data: [{ id: 1, value: 0 }, { id: 2, value: 0 }, { id: 3, value: 0 }],
+      total: 0
+    };
+  }
+  handleChange = (id, value) => {
+    const eleIndex = this.state.data.findIndex(ele => ele.id === id);
+    const newArr = [...this.state.data];
+
+    if (value >= 0) newArr[eleIndex].value = value;
+    const total = newArr.reduce(
+      (acc, element) => (acc = acc + element.value),
+      0
+    );
+
+    this.setState({ data: [...newArr], total: total });
+  };
+
+  render() {
+    return (
+      <div>
+        {this.state.data.map(counter => (
+          <Counter
+            key={counter.id}
+            counter={counter}
+            onChange={this.handleChange}
+          />
+        ))}
+        <p>Total : {this.state.total}</p>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+
+
+
+
+Problem 1
+import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
+
+// state data for 3 counters
+ 
+
+// Counter Component
+class Counter extends Component {
+  render() {
+    const { counter ,onIncrement , onDecrement } = this.props;
+    return (
+      <div className="counter">
+        <b>{counter.value}</b>
+        <div className="counter-controls">
+          <button className="button is-danger is-small" onClick = {() => onDecrement(counter.id)}>-</button>
+          <button className="button is-success is-small" onClick ={() => onIncrement(counter.id)}>+</button>
+        </div>
+      </div>
+    );
+  }
+}
+
+class App extends Component {
+
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      data : [
+        { id: 1, value: 0 },
+        { id: 2, value: 0 },
+        { id: 3, value: 0 }
+      ],
+      total : 0
+    }
+  }
+  handleIncrement = (id) =>{
+    const eleIndex = this.state.data.findIndex(ele => ele.id === id );
+    const newArr = [...this.state.data];
+
+    newArr[eleIndex].value += 1;
+    const total = newArr.reduce((acc , element) => acc= acc+element.value,0)
+
+   this.setState({data : [...newArr] , total : total})
+ 
+  }
+
+  handleDecrement = (id) =>{
+    const eleIndex = this.state.data.findIndex(ele => ele.id === id );
+    const newArr = [...this.state.data];
+
+    newArr[eleIndex].value -= 1;
+    const total = newArr.reduce((acc , element) => acc= acc+element.value,0)
+
+   this.setState({data : [...newArr] , total : total})
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.data.map(counter => (
+          <Counter 
+            key={counter.id}
+            counter={counter}
+            onIncrement = {this.handleIncrement}
+            onDecrement = {this.handleDecrement}
+            />
+        ))}
+        <p>Total : {this.state.total}</p>
+      </div>
+    );
+  }
+}
+
+
+
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+
+
+
