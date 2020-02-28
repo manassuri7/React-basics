@@ -3,6 +3,15 @@ SInce React is all JS, it needs an element where it can render out its own DOM t
 https://www.testdome.com/questions?visibility=3&skillId=304
 https://javascript.info/
 
+splitwise ap designing
+uber app designing
+
+
+Udemy
+Username - 
+
+Password - rain@1234
+
 React interview projects
 "Comments  And Reply" - https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
 "ToDo List" - https://github.com/hugebelieve/CodingQuestions/tree/master/public/inteview
@@ -11,9 +20,19 @@ React interview projects
 Redux projects-https://react.rocks/tag/Redux
 Drag and drop projects-https://react.rocks/tag/Drag_Drop
 React-https://react.rocks/tag/Beautiful
+https://www.golangprograms.com/react-js-blog-crud-operation.html
+https://codesource.io/build-simple-blog-using-axios-with-react/
 
+Why do you have to bind this in react?
+When we bind the this of the event handler to the component instance in the constructor, we can pass it as a callback without worrying about it losing its context. 
+Arrow functions are exempt from this behavior because they use lexical this binding which automatically binds them to the scope they are defined in.
 
-
+Drawbacks of ReactJS:
+Learning curve. Being not full-featured framework it is requered in-depth knowledge for integration user interface free library into MVC framework.
+View-orientedness is one of the cons of ReactJS. It should be found 'Model' and 'Controller' to resolve 'View' problem.
+Not using isomorphic approach to exploit application leads to search engines indexing problems.
+Lots of developers dislike JSX React’s documentation, manuals are difficult for newcomers’ understanding.
+React’s large size library.
 
 Kubernetes
 https://d3jb1lt6v0nddd.cloudfront.net/udemy/Learn+DevOps+-+Kubernetes.pdf   https://github.com/wardviaene/kubernetes-course
@@ -160,6 +179,12 @@ toggle() {
     })
 }
 
+ shallow comparison is when the properties of the objects being compared is done using "===" or strict equality and will not conduct comparisons deeper into the properties. for e.g.
+ const user = this.state.user;
+user.name = "Jane";
+
+console.log(user === this.state.user); // true
+ When comparing objects, it does not compare their's attributes - only their references are compared
  
  Calling setState in render causes infinite loops
  Calling setState() here makes your component a contender for producing infinite loops.
@@ -259,6 +284,8 @@ useEffect(() => {
  },[]);
   return (<div className="joke">{joke}</div>);
 }
+//we provide this empty [] inorder to avoids unncessary rerenders, alo note api call will be made if we write something inside this [],
+ and on change of tht state, api call happens 
 
 Order of lifecycle methods
 During Inital render:
@@ -389,6 +416,72 @@ this.imageRef=React.createRef();
 }
 we pass this to jsx 
 example: <img ref={this.imageRef} alt="" src="" />
+
+Using ref for form validation
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.username = React.createRef();
+    this.password = React.createRef();
+    this.state = {
+      errors: []
+    };
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const username = this.username.current.value;
+    const password = this.password.current.value;
+    const errors = this.handleValidation(username, password);
+
+    if (errors.length > 0) {
+      this.setState({ errors });
+      return;
+    }
+    // submit data
+  };
+
+  handleValidation = (username, password) => {
+    const errors = [];
+    if (username.length === 0) {
+      errors.push("Username cannot be empty");
+    }
+
+    if (password.length < 6) {
+      errors.push("Password should be at least 6 characters long");
+    }
+
+    return errors;
+  };
+
+  render() {
+    const { errors } = this.state;
+    return (
+      <div>
+        <h1>React Ref Example</h1>
+        <form onSubmit={this.handleSubmit}>
+          {errors.map(error => <p key={error}>{error}</p>)}
+          <div>
+            <label>Username:</label>
+            <input type="text" ref={this.username} />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input type="text" ref={this.password} />
+          </div>
+          <div>
+            <button>Submit</button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+}
+
+
+ReactDOM.render(<App />, document.getElementById("root"));
 
 why is redux state immutable,?
 Redux was originally invented to demonstrate the idea of "time-travel debugging" - being able to step back and forth through the history of 
@@ -702,7 +795,8 @@ eg: state={
 * to create a context
 	const myContext=React.createContext();
 
-to return a parents data to a child we wrap the	context inside a provider eg: <myContext.Provider value={{ state:this.state }}> {this.props.children} </myContext.Provider>
+to return a parents data to a child we wrap the	context inside a provider 
+eg: <myContext.Provider value={{ state:this.state }}> {this.props.children} </myContext.Provider>
 And to recieve tht data in child we use Consumer. It always renders a function
 eg: <myContext.Consumer>
        {(context)=>( <p>I'm inside the {context}</p> //context contains data stored inside value. 
@@ -742,8 +836,62 @@ Multiple lazy components can be wrapped with the suspense component.
  It takes a fallback property that accepts the react elements you want to render as the lazy component is being loaded.
 	
 	const OtherComponent = React.lazy(() => import('./OtherComponent'));
-	
-	
+function MyComponent() {
+  return (
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <OtherComponent />
+      </Suspense>
+    </div>
+  );
+}
+
+//To center an element
+div.centered {
+  position: fixed; /* or absolute */
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+Making a triangle
+#triangle {
+    width: 0;
+    height: 0;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    border-bottom: 80px solid lightblue;
+}
+Use of meta tag 'viewport' and why we use initial scale =1
+<meta name="viewport" content="width=500, initial-scale=1">
+For example, if your layout needs at least 500 pixels of width then you can use the following markup. When the screen is more than 500 pixels wide,
+ the browser will expand the viewport (rather than zoom in) to fit the screen:
+ Other attributes that are available are minimum-scale, maximum-scale, and user-scalable. These properties affect the initial scale and width, as well as limiting changes in zoom level.
+
+
+How to use bootstrap with 16 or 24 columns??  yes
+<div class="col-md-12">
+
+    <div class="col-md-6">
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+        <div class="col-md-1">nothing</div>
+    </div>
+
+    <div class="col-md-6">12 here</div>
+
+</div> 
+
 HTML5 new features	
 <section> defines sections of pages.
 <header> defines the header of a page.
@@ -791,6 +939,54 @@ var WithLink = createReactClass({
     return <input type="text" valueLink={this.linkState('message')} />;
   }
 });
+
+Async Cancellation- when we want to cancel all the old api calls which r pending and only want to resolve the latest 1
+We use a variable (abortController) that is scoped outside of the function in question. 
+That way, no matter how many times the function is called and no matter how many requests are in-flight, 
+the only result that will be displayed is the request that was submitted last.
+
+let abortController = new AbortController();
+
+const loadData = async (url) => {
+  abortController.abort(); // Cancel the previous request
+  abortController = new AbortController();
+
+  try {
+    let response = await fetch(url, { signal: abortController.signal });
+    let data = await response.json();
+
+    updateUI(data);
+  }
+  catch (ex) {
+    if (ex.name === 'AbortError') {
+      return; // Continuation logic has already been skipped, so return normally
+    }
+
+    throw ex;
+  }
+};
+
+
+Redux Thunk
+const loadData = (url) => async (dispatch) => {
+  dispatch({ type: 'LOAD_DATA', status: 'pending' });
+
+  let response = await fetch(url);
+  let data = response.json();
+
+  dispatch({ type: 'LOAD_DATA', status: 'success', data });
+};
+
+
+box-sizing defines how the width and height gets applied on an element. It can be useful to play with box-sizing if, 
+for example, an element needs to take a precise amount of space on a page, with its padding and border included. It can take two possible values:
+with content-box the element ends up taller and wider than the specified dimensions because the border and padding fall outside of those dimensions.
+
+content-box: The width & height of the element only include the content.
+ In other words, the border, padding and margin aren’t part of the width or height. This is the default value.
+ 
+ border-box: The padding and border are included in the width and height.
+
 FOR 2 WAY BINDING VALUE/valueLink needs to be declared along with onChange
 
 LinkedStateMixin adds a method to your React component called linkState().
@@ -892,12 +1088,6 @@ React question to start a timer when hovering over the box and stopping it when 
 
 class App extends React.Component {
    constructor(props){
-    super(props)
-     this.handleHover=this.handleHover.bind(this);
-     this.resetButton=this.resetButton.bind(this);
-     this.timerIncrease=this.timerIncrease.bind(this);
-     this.handleLeave=this.handleLeave.bind(this);
-   }
    state={time:0};
 
    timerIncrease=()=>{
@@ -930,7 +1120,12 @@ class App extends React.Component {
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
 
+The findIndex() method returns the index of the first element in an array that pass a test (provided as a function).
 
+The findIndex() method executes the function once for each element present in the array:
+
+If it finds an array element where the function returns a true value, findIndex() returns the index of that array element (and does not check the remaining values)
+Otherwise it returns -1
 
 import ReactDOM from "react-dom";
 import React, { Component } from "react";
@@ -1084,6 +1279,73 @@ class App extends Component {
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
+Autocomplete search bar
+$(function() {
+    var alreadyFilled = false;
+    var states = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+
+    function initDialog() {
+        clearDialog();
+        for (var i = 0; i < states.length; i++) {
+            $('.dialog').append('<div>' + states[i] + '</div>');
+        }
+    }
+    function clearDialog() {
+        $('.dialog').empty();
+    }
+    $('.autocomplete input').click(function() {
+        if (!alreadyFilled) {
+            $('.dialog').addClass('open');
+        }
+
+    });
+    $('body').on('click', '.dialog > div', function() {
+        $('.autocomplete input').val($(this).text()).focus();
+        $('.autocomplete .close').addClass('visible');
+        alreadyFilled = true;
+    });
+    $('.autocomplete .close').click(function() {
+        alreadyFilled = false;
+        $('.dialog').addClass('open');
+        $('.autocomplete input').val('').focus();
+        $(this).removeClass('visible');
+    });
+
+    function match(str) {
+        str = str.toLowerCase();
+        clearDialog();
+        for (var i = 0; i < states.length; i++) {
+            if (states[i].toLowerCase().startsWith(str)) {
+                $('.dialog').append('<div>' + states[i] + '</div>');
+            }
+        }
+    }
+    $('.autocomplete input').on('input', function() {
+        $('.dialog').addClass('open');
+        alreadyFilled = false;
+        match($(this).val());
+    });
+    $('body').click(function(e) {
+        if (!$(e.target).is("input, .close")) {
+            $('.dialog').removeClass('open');
+        }
+    });
+    initDialog();
+});
+
+
+Requirements
+
+1. Build an application to show a list of posts. The api to get list of posts is available at https://jsonplaceholder.typicode.com/posts
+2. Each post should display the title and description
+3. Allow the user to favorite a post and unfavorite a post. The data will remain in the browser and need not be stored on the server.
+4. Add the ability to delete a post
+
+List of APIs - 
+GET https://jsonplaceholder.typicode.com/posts - to get list of posts 
+DELETE https://jsonplaceholder.typicode.com/posts/1 to delete the post
+
+More details at https://jsonplaceholder.typicode.com/guide.html
 
 
 
