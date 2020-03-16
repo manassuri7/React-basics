@@ -6,6 +6,8 @@ https://javascript.info/
 splitwise ap designing
 uber app designing
 
+GraphQL
+https://github.com/StephenGrider/GraphQLCasts
 
 Udemy
 Username - 
@@ -49,6 +51,47 @@ to make a const obj immutable, we need to use freeze keyowrd
 const frozen = Object.freeze(['Ice', 'Icicle', 'Ice cube'])
 frozen.push('Water')
 // Uncaught TypeError: Can't add property 3, object is not extensible
+
+
+what is server stubs
+A stub in distributed computing is a piece of code that converts parameters passed between client and server during a remote procedure call (RPC). 
+The main idea of an RPC is to allow a local computer (client) to remotely call procedures on a different computer (server).
+
+GRPC
+In gRPC a client application can directly call methods on a server application on a different machine as if it was a local object,
+ making it easier for you to create distributed applications and services. As in many RPC systems, gRPC is based around the idea of defining a service, 
+ specifying the methods that can be called remotely with their parameters and return types. On the server side,
+ the server implements this interface and runs a gRPC server to handle client calls.
+ On the client side, the client has a stub (referred to as just a client in some languages) that provides the same methods as the server.
+ 
+ Advantages: used for streaming data, bidirection data flow, fast, grpx code can b generated for any language so microservices cn be created for any languageS
+
+gRPC lets you define four kinds of service method:
+
+Unary RPCs where the client sends a single request to the server and gets a single response back, just like a normal function call.
+rpc SayHello(HelloRequest) returns (HelloResponse) {
+}
+Server streaming RPCs where the client sends a request to the server and gets a stream to read a sequence of messages back.
+ The client reads from the returned stream until there are no more messages. gRPC guarantees message ordering within an individual RPC call.
+rpc LotsOfReplies(HelloRequest) returns (stream HelloResponse) {
+}
+Client streaming RPCs where the client writes a sequence of messages and sends them to the server, again using a provided stream. 
+Once the client has finished writing the messages, it waits for the server to read them and return its response. 
+Again gRPC guarantees message ordering within an individual RPC call.
+rpc LotsOfGreetings(stream HelloRequest) returns (HelloResponse) {
+}
+Bidirectional streaming RPCs where both sides send a sequence of messages using a read-write stream. 
+The two streams operate independently, so clients and servers can read and write in whatever order they like: for example,
+ the server could wait to receive all the client messages before writing its responses, or it could alternately read a message then write a message, 
+ or some other combination of reads and writes. The order of messages in each stream is preserved.
+rpc BidiHello(stream HelloRequest) returns (stream HelloResponse) {
+}
+
+Protocol Buffers in GRPC- they r used to define the messages(data, requests and response), service name and endpoints.
+Efficeincy of protocol buffrs over grpc:
+1. payload size is lesser thn json payload size
+2. faster communication
+3. 
 
 memoization- another way specially for functional components to stop unnecessary re-rendering when the state hasn't changed.
 
@@ -1347,5 +1390,221 @@ DELETE https://jsonplaceholder.typicode.com/posts/1 to delete the post
 
 More details at https://jsonplaceholder.typicode.com/guide.html
 
+Program in react js to take an input from user and validate it
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import './style.css';
+
+class App extends Component {
+  render() {
+    return (
+      <Register />
+    );
+  }
+}
+
+const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+const validateForm = (errors) => {
+  let valid = true;
+  Object.values(errors).forEach(
+    (val) => val.length > 0 && (valid = false)
+  );
+  return valid;
+}
+
+class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fullName: null,
+      email: null,
+      password: null,
+      errors: {
+        fullName: '',
+        email: '',
+        password: '',
+      }
+    };
+  }
+
+  handleChange = (event) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    let errors = this.state.errors;
+
+    switch (name) {
+      case 'fullName': 
+        errors.fullName = 
+          value.length < 5
+            ? 'Full Name must be 5 characters long!'
+            : '';
+        break;
+      case 'email': 
+        errors.email = 
+          validEmailRegex.test(value)
+            ? ''
+            : 'Email is not valid!';
+        break;
+      case 'password': 
+        errors.password = 
+          value.length < 8
+            ? 'Password must be 8 characters long!'
+            : '';
+        break;
+      default:
+        break;
+    }
+
+    this.setState({errors, [name]: value});
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    if(validateForm(this.state.errors)) {
+      console.info('Valid Form')
+    }else{
+      console.error('Invalid Form')
+    }
+  }
+
+  render() {
+    const {errors} = this.state;
+    return (
+      <div className='wrapper'>
+        <div className='form-wrapper'>
+          <h2>Create Account</h2>
+          <form onSubmit={this.handleSubmit} noValidate>
+            <div className='fullName'>
+              <label htmlFor="fullName">Full Name</label>
+              <input type='text' name='fullName' onChange={this.handleChange} noValidate />
+              {errors.fullName.length > 0 && 
+                <span className='error'>{errors.fullName}</span>}
+            </div>
+            <div className='email'>
+              <label htmlFor="email">Email</label>
+              <input type='email' name='email' onChange={this.handleChange} noValidate />
+              {errors.email.length > 0 && 
+                <span className='error'>{errors.email}</span>}
+            </div>
+            <div className='password'>
+              <label htmlFor="password">Password</label>
+              <input type='password' name='password' onChange={this.handleChange} noValidate />
+              {errors.password.length > 0 && 
+                <span className='error'>{errors.password}</span>}
+            </div>
+            <div className='info'>
+              <small>Password must be eight characters in length.</small>
+            </div>
+            <div className='submit'>
+              <button>Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+}
+
+render(<App />, document.getElementById('root'));
 
 
+make a filter dropdown in react
+
+import React from 'react'
+
+import Spinner from '../../components/Spinner/Spinner'
+
+
+class Home extends React.Component {
+    state = {
+        details: [],
+        loading: true
+    }
+    componentDidMount() {
+        fetch('https://reqres.in/api/users?delay=3')
+            .then(res => {
+                return res.json()
+            })
+            .then(data => {
+                this.setState({ details: data.data, loading: false })
+            })
+            .catch(err => console.log(err))
+    }
+
+    changeHandler = (e) => {
+        const { details } = this.state;
+        if (e.target.value === "firstname") {
+            let newArray = details.sort((a, b) => {
+                if (a.first_name.toUpperCase() > b.first_name.toUpperCase()) {
+                    return 1
+                }
+                else {
+                    return -1
+                }
+            })
+            this.setState({ details: newArray })
+        }
+        else if (e.target.value === "lastname") {
+            let newArray = details.sort((a, b) => {
+                if (a.last_name.toUpperCase() > b.last_name.toUpperCase()) {
+                    return 1
+                }
+                else {
+                    return -1
+                }
+            })
+            this.setState({ details: newArray })
+        }
+    }
+    render() {
+
+        return (
+            <div className="container">
+                {this.state.loading ? <Spinner /> :
+                    <>
+                        <label>Sort By</label>
+                        <select onChange={this.changeHandler} >
+                            <option value='none'>----------</option>
+                            <option value='firstname'>First Name</option>
+                            <option value='lastname'>Last Name</option>
+                        </select>
+                        
+                    </>
+                }
+            </div>
+        )
+    }
+}
+
+export default Home
+
+import React from 'react'
+
+class SomeListComponent extends React.Component {
+  constructor(props) {
+  super(props);
+    this.state = { items: props.items }
+  }
+
+  shouldComponentUpdate(nextProps,nextState) {
+    return nextProps.items !== this.props.items
+  }
+
+  handleClick= (index)=> {
+    this.props.onClick(index)
+  }
+
+  renderElement= (item, index) =>{
+    return <li key={index} onClick={() => this.handleClick(index)}>{item.text}</li>
+  }
+
+  render () {
+    return (
+      <ul style={{ backgroundColor: 'red', height: 100 }}>
+        {this.state.items.map((item, i) => this.renderElement(item, i))}
+      </ul>
+    )
+  }
+}
+
+export default SomeListComponent
